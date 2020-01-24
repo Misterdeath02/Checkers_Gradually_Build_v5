@@ -25,7 +25,9 @@ public class Checker {
     }
 
     public boolean canSlide(){
-        //nonsense
+        if(canSlideUpRight || canSlideUpLeft || canSlideDownRight || canSlideDownLeft){
+            return true;
+        }
         return false;
     }
 

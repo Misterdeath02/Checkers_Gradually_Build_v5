@@ -71,11 +71,20 @@ public class Game {
 
     public void setSpaceSelected(int rowClicked, int colClicked, int prevRowClicked, int prevColClicked){
         BoardSpace spaceClicked = boardSpaces[rowClicked][colClicked];
+        spaceClicked.setIsSelected(true);
+        Checker clickedChecker = spaceClicked.getChecker();
+        if(clickedChecker.canSlide()){
+            BoardSpace destSpace = boardSpaces[rowClicked+1][colClicked+1];
+            destSpace.markDestinationOption();
+        }
+        if(spaceClicked.getIsDestinationOption()){
 
+        }
     }
 
     public void updateCheckersWithMovementOptions(){
         updateCheckersWithPossibleJumps();
+        updateCheckersWithPossibleSlides();
         //nonsense
     }
 
@@ -90,6 +99,15 @@ public class Game {
     }
 
     public void updateCheckersWithPossibleJumps(){
+        //nonsense
+    }
+
+    public boolean canCheckerJumpRelDir(Checker checker, int startRow, int startCol, int rowDir, int colDir){
+        //nonsense
+        return false;
+    }
+
+    public void updateCheckersWithPossibleSlides(){
         //Checks which checkers could slide UpRight
         for(int row = 0; row < BOARD_NUM_OF_ROWS; row++){
             for(int col = 0; col < BOARD_NUM_OF_COLS; col++){
@@ -105,15 +123,6 @@ public class Game {
                 }
             }
         }
-    }
-
-    public boolean canCheckerJumpRelDir(Checker checker, int startRow, int startCol, int rowDir, int colDir){
-        //nonsense
-        return false;
-    }
-
-    public void updateCheckersWithPossibleSlides(){
-        //nonsense
     }
 
     public boolean canCheckerSlideRelDir(Checker checker, int startRow, int startCol, int rowDir, int colDir){
