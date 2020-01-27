@@ -58,7 +58,7 @@ public class Game {
     }
 
     public void switchToNextPlayerTurn(){
-        //nonsense
+        isTurnForPlayer1 = !isTurnForPlayer1;
     }
 
     public void resetAllCheckerMovementOptions(){
@@ -73,7 +73,7 @@ public class Game {
         BoardSpace spaceClicked = boardSpaces[rowClicked][colClicked];
         spaceClicked.setIsSelected(true);
         Checker clickedChecker = spaceClicked.getChecker();
-        if(clickedChecker.canSlide()){
+        if(clickedChecker!=null && clickedChecker.canSlide()){
             BoardSpace destSpace = boardSpaces[rowClicked+1][colClicked+1];
             destSpace.markDestinationOption();
         }
@@ -108,25 +108,30 @@ public class Game {
     }
 
     public void updateCheckersWithPossibleSlides(){
-        //Checks which checkers could slide UpRight
         for(int row = 0; row < BOARD_NUM_OF_ROWS; row++){
             for(int col = 0; col < BOARD_NUM_OF_COLS; col++){
                 Checker checker = boardSpaces[row][col].getChecker();
                 if(checker != null){
-                    int destRow = row+1;
-                    int destCol = col+1;
-                    if(isSpaceOnBoard(destRow, destCol)){
-                        if(boardSpaces[destRow][destCol].getChecker() == null){
-                            checker.setCanSlideUpRight(true);
-                        }
-                    }
+                    boolean canSlideUpLeft = canCheckerSlideRelDir(checker, row, col, 1, -1);
+                    boolean canSlideUpRight = canCheckerSlideRelDir(checker, row, col, 1, 1);
+                    boolean canSlideDownLeft = canCheckerSlideRelDir(checker, row, col, -1, -1);
+                    boolean canSlideDownRight = canCheckerSlideRelDir(checker, row, col, -1, 1);
+                    checker.setPossibleSlideDirections(canSlideUpLeft, canSlideUpRight, canSlideDownLeft, canSlideDownRight);
                 }
             }
         }
     }
 
     public boolean canCheckerSlideRelDir(Checker checker, int startRow, int startCol, int rowDir, int colDir){
-        //nonsense
+        if(checker != null){
+            int destRow = startRow+rowDir; //**
+            int destCol = startCol+colDir; //**
+            if(isSpaceOnBoard(destRow, destCol)){
+                if(boardSpaces[destRow][destCol].getChecker() == null){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

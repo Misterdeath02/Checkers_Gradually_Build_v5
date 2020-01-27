@@ -42,16 +42,16 @@ public class Checker {
         canSlideDownRight = false;
     }
 
-    public void setCanSlideUpRight(boolean canSlideUpRight){
-        this.canSlideUpRight = canSlideUpRight;
-    }
 
     public void setPossibleJumpDirections(boolean canJumpUpLeft, boolean canJumpUpRight, boolean canJumpDownLeft, boolean canJumpDownRight){
         //nonsense
     }
 
     public void setPossibleSlideDirections(boolean canSlideUpLeft, boolean canSlideUpRight, boolean canSlideDownLeft, boolean canSlideDownRight){
-        //nonsense
+        this.canSlideUpLeft = canSlideUpLeft;
+        this.canSlideUpRight = canSlideUpRight;
+        this.canSlideDownLeft = canSlideDownLeft;
+        this.canSlideDownRight = canSlideDownRight;
     }
 
     public boolean getBelongsToPlayer1() {
@@ -99,5 +99,6 @@ public class Checker {
         StdDraw.setPenColor(color);
         StdDraw.filledCircle(colIndex+0.5, rowIndex+0.5, 0.37);
     }
+
 
 }
