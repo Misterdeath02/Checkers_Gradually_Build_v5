@@ -5,7 +5,7 @@ public class BoardSpace {
     private Checker checker;
     private boolean isPrimarySpaceColor;
     private boolean isSelected;
-    private boolean isDestinationOption;
+    private boolean isDestinationOption; //is the space a destination for the checker currently clicked?
     private Color color;
 
     public BoardSpace(boolean isPrimarySpaceColor){

@@ -66,16 +66,36 @@ public class Game {
     }
 
     public void resetAllSpaceMarkings(){
-        //nonsense
+        for(int row = 0; row < BOARD_NUM_OF_ROWS; row++) {
+            for (int col = 0; col < BOARD_NUM_OF_COLS; col++) {
+                boardSpaces[row][col].resetMarkings();
+            }
+        }
     }
 
     public void setSpaceSelected(int rowClicked, int colClicked, int prevRowClicked, int prevColClicked){
+        resetAllSpaceMarkings();
         BoardSpace spaceClicked = boardSpaces[rowClicked][colClicked];
         spaceClicked.setIsSelected(true);
         Checker clickedChecker = spaceClicked.getChecker();
         if(clickedChecker!=null && clickedChecker.canSlide()){
-            BoardSpace destSpace = boardSpaces[rowClicked+1][colClicked+1];
-            destSpace.markDestinationOption();
+            if(clickedChecker.getCanSlideUpLeft()){
+                BoardSpace destSpace = boardSpaces[rowClicked+1][colClicked-1];
+                destSpace.markDestinationOption();
+            }
+            if(clickedChecker.getCanSlideUpRight()){
+                BoardSpace destSpace = boardSpaces[rowClicked+1][colClicked+1];
+                destSpace.markDestinationOption();
+            }
+            if(clickedChecker.getCanSlideDownLeft()){
+                BoardSpace destSpace = boardSpaces[rowClicked-1][colClicked-1];
+                destSpace.markDestinationOption();
+            }
+            if(clickedChecker.getCanSlideDownRight()){
+                BoardSpace destSpace = boardSpaces[rowClicked-1][colClicked+1];
+                destSpace.markDestinationOption();
+            }
+
         }
         if(spaceClicked.getIsDestinationOption()){
 
@@ -124,8 +144,8 @@ public class Game {
 
     public boolean canCheckerSlideRelDir(Checker checker, int startRow, int startCol, int rowDir, int colDir){
         if(checker != null){
-            int destRow = startRow+rowDir; //**
-            int destCol = startCol+colDir; //**
+            int destRow = startRow+rowDir;
+            int destCol = startCol+colDir;
             if(isSpaceOnBoard(destRow, destCol)){
                 if(boardSpaces[destRow][destCol].getChecker() == null){
                     return true;
