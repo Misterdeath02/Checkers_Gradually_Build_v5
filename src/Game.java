@@ -74,8 +74,13 @@ public class Game {
     }
 
     public void setSpaceSelected(int rowClicked, int colClicked, int prevRowClicked, int prevColClicked){
-        resetAllSpaceMarkings();
         BoardSpace spaceClicked = boardSpaces[rowClicked][colClicked];
+        if(spaceClicked.getIsDestinationOption()){
+            BoardSpace spacePrevClicked = boardSpaces[prevRowClicked][prevColClicked];
+            Checker checker = spacePrevClicked.pickUpChecker();
+            spaceClicked.placeChecker(checker);
+        }
+        resetAllSpaceMarkings();
         spaceClicked.setIsSelected(true);
         Checker clickedChecker = spaceClicked.getChecker();
         if(clickedChecker!=null && clickedChecker.canSlide()){

@@ -40,7 +40,9 @@ public class BoardSpace {
     }
 
     public Checker pickUpChecker(){
-        return null; //nonsense
+        Checker tempChecker = checker;
+        checker = null;
+        return tempChecker;
     }
 
     public void removeCheckerFromGame(){
