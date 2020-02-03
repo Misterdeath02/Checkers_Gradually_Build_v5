@@ -61,8 +61,16 @@ public class Game {
         isTurnForPlayer1 = !isTurnForPlayer1;
     }
 
+    //For each checker on the board, reset its movement options
     public void resetAllCheckerMovementOptions(){
-        //nonsense
+        for(int row = 0; row < BOARD_NUM_OF_ROWS; row++) {
+            for (int col = 0; col < BOARD_NUM_OF_COLS; col++) {
+                Checker checker = boardSpaces[row][col].getChecker();
+                if(checker != null){
+                    checker.resetMovementOptions();
+                }
+            }
+        }
     }
 
     public void resetAllSpaceMarkings(){
@@ -73,12 +81,48 @@ public class Game {
         }
     }
 
+    /*
+    Questions to make sure you know the answers to:
+        (a) Do we really need to clear out all the checker movement options and then remark them all again every single turn? If not, why do you think I took the approach I did?
+        (b) How does the method resetAllCheckerMovementOptions() work?
+        (c) How does the method switchToNextPlayerTurn() work? Does the game currently care whose turn it is?
+        (d) Why do we call resetAllCheckerMovementOptions(), updateCheckersWithMovementOptions(), and switchToNextPlayerTurn()
+        ONLY when a destination space is clicked?
+     */
     public void setSpaceSelected(int rowClicked, int colClicked, int prevRowClicked, int prevColClicked){
         BoardSpace spaceClicked = boardSpaces[rowClicked][colClicked];
+        //If the user clicks on a space highlighted in yellow, then we know we need to move a checker. Otherwise, we know it is still the same player's turn and do what appears after this if statement.
         if(spaceClicked.getIsDestinationOption()){
             BoardSpace spacePrevClicked = boardSpaces[prevRowClicked][prevColClicked];
             Checker checker = spacePrevClicked.pickUpChecker();
             spaceClicked.placeChecker(checker);
+            /*
+                A checker changing positions on the board is significant for a few reasons:
+                (1) It indicates that it is the next player's turn. (Don't worry about double jumping for now.)
+
+                (2) A checker moving to a new space doesn't auto-magically reset the state of all board spaces.
+
+                (3) A checker moving to a new space doesn't auto-magically reset the state of that checker.
+
+                (4) If we reset all checkers to their default states, then all checkers will be marked as false in terms
+                of being able to slide/jump (see the private instance variables for our checkers if you are confused). If we don't
+                update the checkers again with where they can move based on where they are at on the board, then all our
+                checkers will be permanently stuck.
+
+                (5) If we do not take care of both (2) and (3) above, then this will cause major issues in some
+                situations-- namely, it will cause out of bounds errors and allow checkers to devour one another. Not good.
+
+             */
+            resetAllSpaceMarkings(); //takes care of (2)
+            resetAllCheckerMovementOptions(); //takes care of (3)
+            updateCheckersWithMovementOptions(); //takes care of (4)
+            switchToNextPlayerTurn(); //takes care of (1)
+            return;
+            /*
+                Regarding the above line: setSpaceSelected (the method we are in right now) is a void method. This means
+                we cannot return anything. However, you can still have a completely blank return statement like this; what
+                this does is immediately stop running setSpaceSelected right here.
+             */
         }
         resetAllSpaceMarkings();
         spaceClicked.setIsSelected(true);
@@ -100,11 +144,9 @@ public class Game {
                 BoardSpace destSpace = boardSpaces[rowClicked-1][colClicked+1];
                 destSpace.markDestinationOption();
             }
-
         }
-        if(spaceClicked.getIsDestinationOption()){
 
-        }
+
     }
 
     public void updateCheckersWithMovementOptions(){
