@@ -152,7 +152,6 @@ public class Game {
     public void updateCheckersWithMovementOptions(){
         updateCheckersWithPossibleJumps();
         updateCheckersWithPossibleSlides();
-        //nonsense
     }
 
     public boolean doesCheckerExistWithPossibleJump(){
@@ -166,7 +165,29 @@ public class Game {
     }
 
     public void updateCheckersWithPossibleJumps(){
-        //nonsense
+        //up left
+        for(int row = 0; row < BOARD_NUM_OF_ROWS; row++) {
+            for (int col = 0; col < BOARD_NUM_OF_COLS; col++) {
+                Checker checker = boardSpaces[row][col].getChecker();
+                if(checker != null){
+                    int midSpaceRow = row + 1;
+                    int midSpaceCol = col - 1;
+                    int landSpaceRow = row + 2;
+                    int landSpaceCol = col - 2;
+                    if(isSpaceOnBoard(landSpaceRow,landSpaceCol)){
+                        BoardSpace midSpace = boardSpaces[midSpaceRow][midSpaceCol];
+                        BoardSpace landSpace = boardSpaces[landSpaceRow][landSpaceCol];
+                        Checker midChecker = midSpace.getChecker();
+                        if(midChecker != null && (midChecker.getBelongsToPlayer1() != checker.getBelongsToPlayer1())){
+                            if(landSpace.getChecker() == null){
+                                //Then we can jump!!
+                                checker.setCanJumpUpLeft(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public boolean canCheckerJumpRelDir(Checker checker, int startRow, int startCol, int rowDir, int colDir){

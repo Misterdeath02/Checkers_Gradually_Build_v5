@@ -43,6 +43,10 @@ public class Checker {
     }
 
 
+    public void setCanJumpUpLeft(boolean canJumpUpLeft){
+        this.canJumpUpLeft = canJumpUpLeft;
+    }
+
     public void setPossibleJumpDirections(boolean canJumpUpLeft, boolean canJumpUpRight, boolean canJumpDownLeft, boolean canJumpDownRight){
         //nonsense
     }
